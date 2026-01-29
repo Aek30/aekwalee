@@ -1,201 +1,657 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Freelance Portfolio | รับทำเว็บไซต์</title>
-    
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600&display=swap" rel="stylesheet">
-    
-    <style>
-        /* กำหนดฟอนต์หลักให้ทั้งเว็บ */
-        body { font-family: 'Prompt', sans-serif; }
-        /* Smooth Scroll เมื่อกดลิงก์เมนู */
-        html { scroll-behavior: smooth; }
-    </style>
-</head>
-<body class="bg-gray-50 text-gray-800">
 
-    <nav class="fixed w-full bg-white/90 backdrop-blur-sm shadow-sm z-50">
-        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="#" class="text-2xl font-bold text-indigo-600">DevStudent<span class="text-gray-800">.</span></a>
-            
-            <ul class="hidden md:flex space-x-8 text-gray-600 font-medium">
-                <li><a href="#home" class="hover:text-indigo-600 transition">หน้าแรก</a></li>
-                <li><a href="#bio" class="hover:text-indigo-600 transition">เกี่ยวกับฉัน</a></li>
-                <li><a href="#portfolio" class="hover:text-indigo-600 transition">ผลงาน</a></li>
-                <li><a href="#contact" class="hover:text-indigo-600 transition">ติดต่องาน</a></li>
-            </ul>
-        </div>
+<!DOCTYPE html>
+<html lang="th" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <!-- ทำให้หน้าเว็บ Responsive บนมือถือ/แท็บเล็ต -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>DevStudent - Freelance Portfolio</title>
+
+  <!-- โหลดฟอนต์ Prompt ล่วงหน้าเพื่อลดเวลาเชื่อมต่อ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <!-- gstatic ต้องมี crossorigin เพื่อให้ preconnect มีผลเต็มที่ -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <!-- เลือกน้ำหนักที่ใช้จริง เพื่อลดขนาดดาวน์โหลด -->
+  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+
+  <!-- ใช้ Tailwind ผ่าน CDN (เหมาะกับโปรเจ็กต์โปรไฟล์/เดโม) 
+       - ถ้าไป Production จริง แนะนำ build ด้วย tailwind.config.js เพื่อลด CSS ที่ไม่ใช้ -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    /* Tailwind inline config: 
+     * - ตั้งฟอนต์หลักเป็น Prompt
+     * - เพิ่มสีพาสเทลใช้งานซ้ำ
+     * - เพิ่มเงาแบบนุ่ม (soft)
+     */
+    tailwind.config = {
+      theme: {
+        fontFamily: {
+          sans: ['Prompt', 'sans-serif'],
+        },
+        extend: {
+          colors: {
+            'pastel-bg': '#FFF8F3',     // พื้นหลังครีมอมส้ม
+            'pastel-orange': '#FFCCAA', // สีส้มพาสเทล
+            'pastel-accent': '#FF9F76', // สีส้มเน้น (ปุ่ม/ไฮไลต์)
+            'pastel-dark': '#5C4033',   // น้ำตาลเข้มแทนสีดำ
+          },
+          boxShadow: {
+            'soft': '0 10px 40px -10px rgba(255, 159, 118, 0.3)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* ปรับแต่ง scrollbar สำหรับ WebKit (Chrome/Edge/Safari)
+       - ยังเลื่อนได้ปกติ แต่ธีมเข้ากับสีของเว็บ */
+    body::-webkit-scrollbar{ width:8px; }
+    body::-webkit-scrollbar-track{ background:#FFF8F3; }
+    body::-webkit-scrollbar-thumb{ background-color:#FFCCAA; border-radius:20px; }
+
+    /* คีย์เฟรมสำหรับพื้นหลัง blob ที่ลอยนุ่ม ๆ 
+       - ใช้ร่วมกับ .animate-blob และ .animation-delay-2000 */
+    @keyframes blob {
+      0%   { transform: translate(0px, 0px) scale(1); }
+      33%  { transform: translate(30px, -20px) scale(1.05); }
+      66%  { transform: translate(-20px, 20px) scale(0.95); }
+      100% { transform: translate(0px, 0px) scale(1); }
+    }
+    .animate-blob { animation: blob 12s ease-in-out infinite; }
+    .animation-delay-2000 { animation-delay: 2s; }
+
+    /* รองรับผู้ใช้ที่ตั้งค่าลดการเคลื่อนไหว (Accessibility) 
+       - ตัด animation/transition ให้หมดเพื่อลดอาการเวียนหัว/เมา motion */
+    @media (prefers-reduced-motion: reduce) {
+      .animate-blob, .transition, .transform {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+
+    /* คลาสซ่อนข้อความให้ผู้อ่านหน้าจอ (screen reader) ยังอ่านได้ */
+    .sr-only {
+      position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+      overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
+    }
+  </style>
+</head>
+
+<body class="bg-pastel-bg text-pastel-dark selection:bg-pastel-orange selection:text-white">
+  <!-- ===== Header + Navbar =====
+       - fixed + backdrop-blur เพื่อให้เมนูลอยเหนือคอนเทนต์
+       - z-50 ให้เหนือทุกองค์ประกอบ -->
+  <div id="pageHeader" class="fixed top-5 left-0 right-0 z-50 flex justify-center px-4">
+    <nav class="bg-white/80 backdrop-blur-md border border-white/50 px-6 py-3 rounded-full shadow-soft flex items-center justify-between w-full max-w-[680px]"
+         aria-label="เมนูหลัก">
+      <!-- โลโก้/แบรนด์ -->
+      <a href="#" class="font-bold text-xl text-pastel-accent tracking-wider">
+        Dev<span class="text-pastel-dark">Student</span>
+      </a>
+
+      <!-- เมนูเดสก์ท็อป (ซ่อนบนจอเล็ก) -->
+      <div class="hidden md:flex space-x-6 text-sm font-medium text-gray-600">
+        <a href="#about" class="hover:text-pastel-accent transition">เกี่ยวกับดิฉัน</a>
+        <a href="#portfolio" class="hover:text-pastel-accent transition">ผลงาน</a>
+        <a href="#contact" class="hover:text-pastel-accent transition">ติดต่อ</a>
+      </div>
+
+      <!-- ปุ่มเมนูมือถือ: ใช้ aria-controls/aria-expanded เพื่อ A11y -->
+      <button id="menuToggle"
+              class="md:hidden text-pastel-dark p-2 rounded-lg hover:bg-white/70 focus:outline-none focus:ring-2 focus:ring-pastel-accent"
+              aria-controls="mobileMenu"
+              aria-expanded="false"
+              aria-label="เปิดเมนู">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6"
+             fill="none" viewBox="0 0 24 24" stroke="currentColor" role="img" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4 6h16M4 12h16m-7 6h7"/>
+        </svg>
+      </button>
     </nav>
 
-    <section id="home" class="min-h-screen flex items-center justify-center pt-16">
-        <div class="container mx-auto px-6 text-center">
-            <div class="mb-6">
-                <span class="bg-indigo-100 text-indigo-800 py-1 px-3 rounded-full text-sm font-semibold">รับงาน Freelance</span>
-            </div>
-            <h1 class="text-4xl md:text-6xl font-bold mb-4 leading-tight">
-                สวัสดี! ผมชื่อ <span class="text-indigo-600">ต้น</span> <br>
-                นักศึกษาสาย Dev รับทำเว็บไซต์
+    <!-- แผงเมนูมือถือ: toggle ด้วย JS 
+         - เริ่มต้น hidden -->
+    <div id="mobileMenu" class="md:hidden mt-3 w-full max-w-[680px] mx-auto px-4 hidden">
+      <div class="bg-white/90 backdrop-blur-md border border-white/50 rounded-2xl shadow-soft p-4">
+        <a href="#about" class="block py-2 text-sm font-medium text-gray-700 hover:text-pastel-accent">เกี่ยวกับดิฉัน</a>
+        <a href="#portfolio" class="block py-2 text-sm font-medium text-gray-700 hover:text-pastel-accent">ผลงาน</a>
+        <a href="#contact" class="block py-2 text-sm font-medium text-gray-700 hover:text-pastel-accent">ติดต่อ</a>
+      </div>
+    </div>
+  </div>
+
+  <main id="pageMain" class="container mx-auto px-4 md:px-6 pt-32 pb-20">
+    <!-- ===== ABOUT ===== -->
+    <section id="about" class="relative mb-20">
+      <!-- พื้นหลัง blob ไล่โทน (ตำแหน่ง absolute + -z-10 ให้ไปชั้นล่างสุด) -->
+      <div class="absolute top-20 left-0 w-72 h-72 bg-pastel-orange rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob -z-10"></div>
+      <div class="absolute bottom-0 right-0 w-72 h-72 bg-yellow-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000 -z-10"></div>
+
+      <div class="max-w-6xl mx-auto space-y-24 w-full">
+        <!-- แถวหัวเรื่องและรูป -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+          <!-- ข้อความแนะนำตัว -->
+          <div class="text-center md:text-left order-2 md:order-1">
+            <span class="inline-block py-1.5 px-4 rounded-full bg-orange-100 text-orange-500 text-xs font-bold tracking-widest mb-5">
+              FREELANCE DEVELOPER
+            </span>
+            <h1 class="text-3xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6 text-pastel-dark">
+              สร้างเว็บไซต์ <br>
+              <span class="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-orange-300 whitespace-nowrap">
+                ที่ใช่ ในสไตล์คุณ
+              </span>
             </h1>
-            <p class="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
-                เปลี่ยนไอเดียของคุณให้เป็นเว็บไซต์ที่สวยงาม ใช้งานง่าย และรองรับทุกอุปกรณ์
-                ในราคานักศึกษา แต่คุณภาพมืออาชีพ
+            <p class="text-lg text-gray-600 leading-relaxed max-w-lg mx-auto md:mx-0 mb-8">
+              สวัสดีค่ะ ดิฉันชื่อ <strong>เอกวลี</strong> นักศึกษาไอทีที่หลงใหลในการเขียนโค้ด 
+              รับทำเว็บไซต์ ดีไซน์ทันสมัย ใส่ใจรายละเอียด เพื่อช่วยให้ธุรกิจของคุณเติบโต
             </p>
-            <div class="flex justify-center gap-4">
-                <a href="#contact" class="bg-indigo-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition shadow-lg hover:shadow-xl">จ้างงานเลย</a>
-                <a href="#portfolio" class="bg-white text-indigo-600 border border-indigo-200 px-8 py-3 rounded-lg font-semibold hover:bg-indigo-50 transition">ดูผลงาน</a>
+
+            <div class="flex flex-wrap justify-center md:justify-start gap-3">
+              <span class="px-5 py-2 bg-white border border-orange-100 rounded-full text-sm text-gray-500 font-medium shadow-sm">HTML5</span>
+              <span class="px-5 py-2 bg-white border border-orange-100 rounded-full text-sm text-gray-500 font-medium shadow-sm">Tailwind CSS</span>
+              <span class="px-5 py-2 bg-white border border-orange-100 rounded-full text-sm text-gray-500 font-medium shadow-sm">JavaScript</span>
             </div>
+          </div>
+
+          <!-- รูปโปรไฟล์: eager เพราะอยู่ above-the-fold -->
+          <div class="order-1 md:order-2 flex justify-center">
+            <div class="relative w-64 h-64 md:w-80 md:h-80">
+              <div class="absolute inset-0 bg-orange-200 rounded-[40%_60%_70%_30%/40%_50%_60%_50%] rotate-6 opacity-50 transform scale-110"></div>
+              <div class="relative w-full h-full overflow-hidden rounded-[40%_60%_70%_30%/40%_50%_60%_50%] border-[6px] border-white shadow-soft bg-blue-300">
+                <!-- แนะนำ: ใช้รูปที่ขนาดเหมาะสม เพื่อลด LCP -->
+                <img src="assets/images/profile.jpg"
+                     alt="รูปโปรไฟล์ของเอกวลี"
+                     class="w-full h-full object-cover object-top"
+                     loading="eager"
+                     decoding="async"/>
+              </div>
+            </div>
+          </div>
         </div>
+
+        <!-- การ์ด Bio + Skills -->
+        <div class="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-[0_20px_50px_-12px_rgba(255,200,150,0.3)] border border-orange-50 relative overflow-hidden">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-12 relative z-10">
+            <!-- Bio -->
+            <div>
+              <div class="flex items-center space-x-3 mb-4">
+                <span class="w-10 h-10 flex items-center justify-center bg-orange-100 text-2xl rounded-full">👋</span>
+                <h3 class="text-2xl font-bold text-pastel-dark">รู้จักกันมากขึ้น <span class="text-pastel-accent text-base font-normal">.bio</span></h3>
+              </div>
+              <p class="text-gray-600 leading-relaxed mb-8">
+                ปัจจุบันเป็นนักศึกษาชั้นปีที่ 2 สาขาเทคโนโลยีสารสนเทศและการสื่อสารดิจิทัล 
+                มีความสนใจพิเศษในด้าน <strong>Web Development</strong> และ <strong>Database</strong> 
+                สนุกกับการแก้ปัญหาผ่านการเขียนโค้ดค่ะ
+              </p>
+
+              <div class="bg-[#FFFDF5] rounded-2xl p-6 border border-orange-100">
+                <h4 class="font-bold text-lg text-pastel-dark mb-3 flex items-center">
+                  🎓 การศึกษา (Education)
+                </h4>
+                <ul class="space-y-2 text-sm text-gray-700">
+                  <li>• <strong>ปริญญาตรี:</strong> คณะวิทยาศาสตร์และเทคโนโลยี</li>
+                  <li>• <strong>สาขา:</strong> เทคโนโลยีสารสนเทศ (IT)</li>
+                  <li>• <strong>เกรดเฉลี่ย:</strong> 3.76</li>
+                </ul>
+              </div>
+            </div>
+
+            <!-- Skills -->
+            <div class="space-y-8 pt-2">
+              <div>
+                <h4 class="font-bold text-lg text-pastel-dark mb-5 flex items-center space-x-2">
+                  <span>💻</span> <span>Technical Skills</span>
+                </h4>
+                <div class="space-y-5">
+                  <!-- Progress bars: ใช้ width แทนเปอร์เซ็นต์ -->
+                  <div>
+                    <div class="flex justify-between text-sm font-bold text-gray-600 mb-2">
+                      <span>HTML / CSS / Tailwind</span>
+                      <span class="text-orange-300 text-xs font-normal">Intermediate</span>
+                    </div>
+                    <div class="w-full bg-gray-100 rounded-full h-2.5">
+                      <div class="bg-orange-400 h-2.5 rounded-full" style="width:65%"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="flex justify-between text-sm font-bold text-gray-600 mb-2">
+                      <span>JavaScript / DOM</span>
+                      <span class="text-orange-300 text-xs font-normal">Intermediate</span>
+                    </div>
+                    <div class="w-full bg-gray-100 rounded-full h-2.5">
+                      <div class="bg-[#FFC09F] h-2.5 rounded-full" style="width:55%"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="flex justify-between text-sm font-bold text-gray-600 mb-2">
+                      <span>Database / SQL</span>
+                      <span class="text-orange-300 text-xs font-normal">Intermediate</span>
+                    </div>
+                    <div class="w-full bg-gray-100 rounded-full h-2.5">
+                      <div class="bg-[#FDE047] h-2.5 rounded-full" style="width:50%"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h4 class="font-bold text-lg text-pastel-dark mb-4 flex items-center space-x-2">
+                  <span>🛠️</span> <span>Soft Skills</span>
+                </h4>
+                <div class="flex flex-wrap gap-2">
+                  <span class="px-4 py-2 bg-white border border-gray-200 rounded-lg text-xs text-gray-600 font-medium shadow-sm hover:border-orange-300 transition">Fast Learner</span>
+                  <span class="px-4 py-2 bg-white border border-gray-200 rounded-lg text-xs text-gray-600 font-medium shadow-sm hover:border-orange-300 transition">Teamwork</span>
+                  <span class="px-4 py-2 bg-white border border-gray-200 rounded-lg text-xs text-gray-600 font-medium shadow-sm hover:border-orange-300 transition">Communication</span>
+                  <span class="px-4 py-2 bg-white border border-gray-200 rounded-lg text-xs text-gray-600 font-medium shadow-sm hover:border-orange-300 transition">Git/GitHub</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div> 
+      </div>
     </section>
 
-    <section id="bio" class="py-20 bg-white">
-        <div class="container mx-auto px-6">
-            <div class="flex flex-col md:flex-row items-center gap-12">
-                <div class="w-full md:w-1/2 flex justify-center">
-                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=crop&w=600&h=600" 
-                         alt="Profile" 
-                         class="rounded-2xl shadow-2xl w-80 h-80 object-cover rotate-3 hover:rotate-0 transition duration-300">
-                </div>
-                
-                <div class="w-full md:w-1/2">
-                    <h2 class="text-3xl font-bold mb-6 text-gray-900">เกี่ยวกับตัวผม</h2>
-                    <p class="text-gray-600 leading-relaxed mb-6">
-                        ผมเป็นนักศึกษาชั้นปีที่ 2 คณะเทคโนโลยีสารสนเทศ ที่มีความหลงใหลในการเขียนโค้ดและสร้างสรรค์สิ่งใหม่ๆ 
-                        ผมเริ่มรับงาน Freelance เพื่อหาประสบการณ์และรายได้เสริม โดยมีความเชี่ยวชาญในการทำ Front-end Development
-                    </p>
-                    
-                    <h3 class="font-bold text-lg mb-3">ทักษะ (Skills)</h3>
-                    <div class="flex flex-wrap gap-2">
-                        <span class="px-3 py-1 bg-orange-100 text-orange-600 rounded-full text-sm font-semibold">HTML5</span>
-                        <span class="px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-sm font-semibold">CSS3</span>
-                        <span class="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-sm font-semibold">JavaScript</span>
-                        <span class="px-3 py-1 bg-cyan-100 text-cyan-600 rounded-full text-sm font-semibold">Tailwind CSS</span>
-                        <span class="px-3 py-1 bg-green-100 text-green-600 rounded-full text-sm font-semibold">Vue.js</span>
-                    </div>
-                </div>
-            </div>
+    <!-- ===== PORTFOLIO =====
+         - การ์ดคลิกแล้วเรียก openModal('พาธรูปใหญ่')
+         - img ภายในการ์ดใช้ loading="lazy" ลดโหลดหน้าแรก -->
+    <section id="portfolio" class="py-10">
+      <div class="flex flex-col items-center mb-12">j
+        <h2 class="text-3xl font-bold mb-3 relative inline-block text-pastel-dark">
+          ผลงานของดิฉัน
+          <svg class="absolute w-full h-3 -bottom-1 left-0 text-pastel-accent opacity-60" viewBox="0 0 100 10" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M0 5 Q 50 10 100 5" stroke="currentColor" stroke-width="3" fill="none" />
+          </svg>
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Card 1 -->
+        <div class="group bg-white rounded-[2rem] p-4 shadow-sm hover:shadow-soft transition-all duration-300 hover:-translate-y-2 border border-orange-50 cursor-pointer"
+             onclick="openModal('assets/images/Cer1.png')">
+          <div class="h-56 rounded-[1.5rem] overflow-hidden mb-4 relative bg-gray-100">
+            <img src="assets/images/Cer1.png"
+                 class="w-full h-full object-cover object-top group-hover:scale-105 transition duration-500"
+                 alt="ใบประกาศ Cabling Contest Training"
+                 loading="lazy"
+                 decoding="async"/>
+          </div>
+          <div class="px-2 pb-2">
+            <h3 class="text-xl font-bold text-pastel-dark">Cabling Contest Training</h3>
+            <p class="text-sm text-gray-500 mt-2 line-clamp-3">
+              เข้าร่วมโครงการอบรมเชิงปฏิบัติการ Cabling Contest Training ครั้งที่ 13 จัดโดย LINK American Cabling เรียนรู้มาตรฐานและการติดตั้งระบบสายสัญญาณ
+            </p>
+          </div>
         </div>
+
+        <!-- Card 2 -->
+        <div class="group bg-white rounded-[2rem] p-4 shadow-sm hover:shadow-soft transition-all duration-300 hover:-translate-y-2 border border-orange-50 cursor-pointer"
+             onclick="openModal('assets/images/Cer2.png')">
+          <div class="h-56 rounded-[1.5rem] overflow-hidden mb-4 relative bg-gray-100">
+            <img src="assets/images/Cer2.png"
+                 class="w-full h-full object-cover object-top group-hover:scale-105 transition duration-500"
+                 alt="ใบประกาศ Generative AI Specialist"
+                 loading="lazy"
+                 decoding="async"/>
+          </div>
+          <div class="px-2 pb-2">
+            <h3 class="text-xl font-bold text-pastel-dark">Generative AI Specialist</h3>
+            <p class="text-sm text-gray-500 mt-2 line-clamp-3">
+              ผ่านการอบรมโครงการพัฒนาศักยภาพด้าน Generative AI หลักสูตร "AI Basics" และ "Prompt Engineering" ร่วมกับ Microsoft
+            </p>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="group bg-white rounded-[2rem] p-4 shadow-sm hover:shadow-soft transition-all duration-300 hover:-translate-y-2 border border-orange-50 cursor-pointer"
+             onclick="openModal('assets/images/Cer3.png')">
+          <div class="h-56 rounded-[1.5rem] overflow-hidden mb-4 relative bg-gray-100">
+            <img src="assets/images/Cer3.png"
+                 class="w-full h-full object-cover object-top group-hover:scale-105 transition duration-500"
+                 alt="ใบประกาศ Cybersecurity Specialist"
+                 loading="lazy"
+                 decoding="async"/>
+          </div>
+          <div class="px-2 pb-2">
+            <h3 class="text-xl font-bold text-pastel-dark">Cybersecurity Specialist</h3>
+            <p class="text-sm text-gray-500 mt-2 line-clamp-3">
+              เข้าร่วมโครงการพัฒนาศักยภาพนักวิเคราะห์ความปลอดภัยทางไซเบอร์สู่มาตรฐานสากล หลักสูตร IT Specialist : Cybersecurity
+            </p>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <section id="portfolio" class="py-20 bg-gray-50">
-        <div class="container mx-auto px-6">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl font-bold mb-4">ผลงานที่ผ่านมา</h2>
-                <p class="text-gray-600">โปรเจกต์บางส่วนที่ผมได้พัฒนาขึ้นทั้งในคลาสเรียนและงานจริง</p>
-            </div>
+    <!-- ===== CONTACT ===== -->
+    <section id="contact" class="max-w-5xl mx-auto pb-20">
+      <!-- การ์ด 2 คอลัมน์: ข้อมูลติดต่อ + ฟอร์ม -->
+      <div class="bg-white rounded-[3rem] shadow-soft overflow-hidden grid grid-cols-1 md:grid-cols-5">
+        <!-- คอลัมน์ซ้าย: เชิญชวน + ช่องทางติดต่อ -->
+        <div class="bg-pastel-orange/30 p-10 md:col-span-2 flex flex-col justify-center text-center md:text-left">
+          <h2 class="text-2xl font-bold mb-4 text-pastel-dark">ร่วมงานกันไหม?</h2>
+          <p class="text-sm text-gray-700 mb-8">
+            พร้อมเริ่มโปรเจกต์ใหม่ๆ เสมอ ทักมาคุยรายละเอียดหรือปรึกษาก่อนได้ค่ะ
+          </p>
+          <div class="space-y-4">
+            <!-- Email: ใช้ mailto เพื่อเปิดแอพอีเมล -->
+            <a href="mailto:aekwalee3004@gmail.com"
+               class="flex items-center space-x-3 bg-white/50 p-3 rounded-xl hover:bg-white transition">
+              <span class="bg-pastel-accent text-white p-2 rounded-lg">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                </svg>
+              </span>
+              <span class="text-sm font-semibold">aekwalee3004@gmail.com</span>
+            </a>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                
-                <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
-                    <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?fit=crop&w=800&h=500" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <h3 class="font-bold text-xl mb-2">เว็บร้านกาแฟ Cafe' De Tree</h3>
-                        <p class="text-gray-600 text-sm mb-4">เว็บไซต์ Landing Page สำหรับร้านกาแฟ เน้นดีไซน์เรียบหรู พร้อมเมนูออนไลน์</p>
-                        <span class="text-xs text-indigo-500 font-bold uppercase tracking-wide">Design / HTML / CSS</span>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
-                    <img src="https://images.unsplash.com/photo-1555421689-492a1880ce49?fit=crop&w=800&h=500" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <h3 class="font-bold text-xl mb-2">ระบบจัดการ Todo List</h3>
-                        <p class="text-gray-600 text-sm mb-4">เว็บแอปพลิเคชันสำหรับจัดการงานประจำวัน บันทึกข้อมูลลง Local Storage</p>
-                        <span class="text-xs text-indigo-500 font-bold uppercase tracking-wide">JavaScript / DOM</span>
-                    </div>
-                </div>
-
-                <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
-                    <img src="https://images.unsplash.com/photo-1522542550221-31fd19575a2d?fit=crop&w=800&h=500" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <h3 class="font-bold text-xl mb-2">Portfolio เก่าปี 1</h3>
-                        <p class="text-gray-600 text-sm mb-4">เว็บไซต์พอร์ตโฟลิโอแรกที่เขียนด้วย HTML และ CSS ล้วน</p>
-                        <span class="text-xs text-indigo-500 font-bold uppercase tracking-wide">HTML / CSS</span>
-                    </div>
-                </div>
-
-            </div>
+            <!-- GitHub: เปิดแท็บใหม่ + rel="noopener noreferrer" เพื่อความปลอดภัย -->
+            <a href="https://github.com/Aek30" target="_blank" rel="noopener noreferrer"
+               class="flex items-center space-x-3 bg-white/50 p-3 rounded-xl hover:bg-white transition">
+              <span class="bg-pastel-accent text-white p-2 rounded-lg">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+              </span>
+              <span class="text-sm font-semibold">github.com/Aek30</span>
+            </a>
+          </div>
         </div>
-    </section>
 
-    <section id="contact" class="py-20 bg-white">
-        <div class="container mx-auto px-6 max-w-4xl">
-            <div class="bg-indigo-600 rounded-2xl shadow-xl overflow-hidden flex flex-col md:flex-row">
-                
-                <div class="p-10 bg-indigo-600 text-white md:w-1/2">
-                    <h2 class="text-3xl font-bold mb-4">สนใจร่วมงาน?</h2>
-                    <p class="mb-8 text-indigo-100">กรอกข้อมูลลงในฟอร์มเพื่อติดต่อสอบถามรายละเอียด หรือจ้างงานได้เลยครับ</p>
-                    
-                    <div class="space-y-4">
-                        <div class="flex items-center gap-3">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                            <span>student@example.com</span>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path></svg>
-                            <span>fb.com/mystudentlife</span>
-                        </div>
-                        <div class="flex items-center gap-3">
-                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path></svg>
-                            <span>github.com/myusername</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="p-10 bg-white md:w-1/2">
-                    <form id="contactForm" class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">ชื่อของคุณ</label>
-                            <input type="text" id="name" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">อีเมล</label>
-                            <input type="email" id="email" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">ข้อความ</label>
-                            <textarea id="message" rows="3" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition"></textarea>
-                        </div>
-                        <button type="submit" class="w-full bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-indigo-700 transition duration-300">
-                            ส่งข้อความ
-                        </button>
-                    </form>
-                </div>
-
+        <!-- คอลัมน์ขวา: ฟอร์มติดต่อ -->
+        <div class="p-8 md:col-span-3 bg-white">
+          <!-- novalidate: ปิด validation เดิมของเบราว์เซอร์ เพื่อใช้ JS ของเราเอง -->
+          <form id="contactForm" class="space-y-4" novalidate>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="text-xs font-bold text-gray-500 uppercase ml-2">ชื่อของคุณ</label>
+                <input type="text" id="name" class="w-full bg-orange-50 border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-pastel-accent outline-none transition mt-1" placeholder="กรอกชื่อ...">
+                <!-- กล่องแสดง error: เริ่มซ่อน -->
+                <p id="nameError" class="text-red-500 text-xs mt-1 ml-2 hidden"></p>
+              </div>
+              <div>
+                <label class="text-xs font-bold text-gray-500 uppercase ml-2">อีเมล</label>
+                <input type="email" id="email" class="w-full bg-orange-50 border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-pastel-accent outline-none transition mt-1" placeholder="example@mail.com">
+                <p id="emailError" class="text-red-500 text-xs mt-1 ml-2 hidden"></p>
+              </div>
             </div>
+
+            <div>
+              <label class="text-xs font-bold text-gray-500 uppercase ml-2">ข้อความ</label>
+              <textarea id="message" rows="4" class="w-full bg-orange-50 border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-pastel-accent outline-none transition mt-1" placeholder="รายละเอียดงาน..."></textarea>
+              <p id="messageError" class="text-red-500 text-xs mt-1 ml-2 hidden"></p>
+            </div>
+
+            <!-- ปุ่มส่ง: มี active:scale-95 ให้ feedback ตอนคลิก -->
+            <button type="submit" id="submitBtn" class="w-full bg-pastel-accent hover:bg-orange-400 text-white font-bold py-3 rounded-xl shadow-md transform active:scale-95 transition-all duration-200">
+              ส่งข้อความ
+            </button>
+          </form>
+
+          <!-- กล่องแจ้งผลลัพธ์หลังส่งสำเร็จ (ใช้แค่กล่องเดียว ป้องกัน id ซ้ำ) -->
+          <div id="resultMsg" class="hidden mt-4 bg-green-50 text-green-700 px-4 py-3 rounded-xl text-center text-sm border border-green-200">
+            ✨ ขอบคุณค่ะ! ดิฉันได้รับข้อความแล้ว จะรีบตอบกลับนะ
+          </div>
         </div>
+      </div>
     </section>
+  </main>
 
-    <footer class="bg-gray-800 text-white py-6 text-center">
-        <p>&copy; 2024 DevStudent Portfolio. All rights reserved.</p>
-    </footer>
+  <footer id="pageFooter" class="text-center py-6 text-gray-400 text-sm">
+    <p>&copy; 2026 Created with 🧡 by Aekwalee</p>
+  </footer>
 
-    <script>
-        // 1. เลือก Element ฟอร์มจาก DOM โดยใช้ ID
-        const contactForm = document.getElementById('contactForm');
+  <!-- ===== Image Modal =====
+       - โมดัลภาพแบบเต็มจอ: ใช้ hidden + opacity-0 สำหรับ transition เข้า/ออก
+       - คลิกพื้นหลังหรือปุ่ม × เพื่อปิด
+       - มีการจัดการโฟกัส/aria ใน JS เพื่อ A11y -->
+  <div id="imageModal"
+       class="fixed inset-0 z-[100] hidden bg-black/90 backdrop-blur-sm items-center justify-center p-4 opacity-0 transition-opacity duration-300"
+       onclick="closeModal()">
+    <!-- 🔧 เพิ่ม id="modalCloseBtn" เพื่อให้ JS เรียก focus ได้ -->
+    <button id="modalCloseBtn"
+            class="absolute top-5 right-5 text-white/80 hover:text-white text-4xl font-bold transition transform hover:rotate-90"
+            onclick="closeModal()"
+            aria-label="ปิดภาพ">&times;</button>
 
-        // 2. สร้าง Event Listener เพื่อดักจับเหตุการณ์การกดปุ่ม "ส่งข้อความ" (submit)
-        contactForm.addEventListener('submit', function(event) {
-            
-            // 3. ป้องกันไม่ให้หน้าเว็บ Refresh (พฤติกรรมปกติของ Form)
-            event.preventDefault();
+    <!-- รูปในโมดัล: object-contain เพื่อรักษาสัดส่วน, scale-95 เพื่อทำเอฟเฟกต์ซูมเข้า -->
+    <img id="modalImg" src="" alt="ภาพผลงานแบบขยาย"
+         class="max-h-[90vh] max-w-full rounded-lg shadow-2xl transform scale-95 transition-transform duration-300 object-contain"
+         onclick="event.stopPropagation()">
+  </div>
+    
 
-            // 4. ดึงค่า (Value) จาก Input ต่างๆ
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            
-            // 5. สร้าง Logic ตรวจสอบเบื้องต้น หรือแสดงผลลัพธ์
-            if(name && email) {
-                // แสดง Alert แจ้งเตือนผู้ใช้
-                alert(`ขอบคุณครับคุณ ${name}! \nเราได้รับข้อมูลของคุณทาง ${email} เรียบร้อยแล้ว (Demo Only)`);
-                
-                // 6. เคลียร์ค่าในฟอร์มหลังจากส่งเสร็จ (Reset Form)
-                contactForm.reset();
-            }
-        });
-    </script>
+  <!-- ===== SCRIPTS ===== -->
+  <script>
+    /* ================== Mobile Menu Toggle (A11y) ==================
+     * - ใช้ aria-expanded เพื่อบอกสถานะเปิด/ปิด
+     * - ปิดด้วย ESC และเมื่อกดลิงก์ในเมนู
+     */
+    const menuToggle = document.getElementById('menuToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
 
+    function closeMobileMenu() {
+      mobileMenu.classList.add('hidden');
+      menuToggle.setAttribute('aria-expanded', 'false');
+      document.removeEventListener('keydown', mobileMenuEscHandler);
+    }
+    function openMobileMenu() {
+      mobileMenu.classList.remove('hidden');
+      menuToggle.setAttribute('aria-expanded', 'true');
+      document.addEventListener('keydown', mobileMenuEscHandler);
+    }
+    function mobileMenuEscHandler(e) {
+      if (e.key === 'Escape') closeMobileMenu();
+    }
+    menuToggle.addEventListener('click', () => {
+      const expanded = menuToggle.getAttribute('aria-expanded') === 'true';
+      expanded ? closeMobileMenu() : openMobileMenu();
+    });
+    // ปิดเมนูเมื่อคลิกลิงก์ในเมนู (ปรับ UX บนมือถือ)
+    mobileMenu.addEventListener('click', (e) => {
+      if (e.target.closest('a')) closeMobileMenu();
+    });
+
+    /* ================== Image Modal (A11y + Focus Trap) ==================
+     * - เปิดโมดัล: เอา hidden ออก + ใส่ flex เพื่อ align center
+     * - เล่น transition ด้วยการสลับคลาส opacity/scale
+     * - ซ่อนบริบทอื่นด้วย aria-hidden เพื่อ screen reader
+     * - ดัก Tab ให้อยู่ในโมดัล (focus trap)
+     */
+    const modal = document.getElementById('imageModal');
+    const modalImg = document.getElementById('modalImg');
+    const modalCloseBtn = document.getElementById('modalCloseBtn'); // ต้องมี id ใน HTML
+    const pageHeader = document.getElementById('pageHeader');
+    const pageMain = document.getElementById('pageMain');
+    const pageFooter = document.getElementById('pageFooter');
+
+    let lastFocusedElement = null; // เก็บ element ที่โฟกัสก่อนเปิดโมดัลไว้เพื่อคืนโฟกัสตอนปิด
+
+    // helper: คืนรายการ element ที่โฟกัสได้ภายในโมดัล (สำหรับ focus trap)
+    function getFocusableElements(root) {
+      return root.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+    }
+
+    // ดักการกด Tab ให้วนอยู่ในโมดัล
+    function trapFocus(e) {
+      if (e.key !== 'Tab') return;
+      const focusables = Array.from(getFocusableElements(modal))
+        .filter(el => !el.hasAttribute('disabled') && el.offsetParent !== null);
+      if (focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+
+    // เปิดโมดัล: เซ็ต src, แสดง, เล่น transition, ตั้ง aria, เริ่ม focus trap
+    function openModal(imageSrc) {
+      lastFocusedElement = document.activeElement;
+
+      modalImg.src = imageSrc;
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+
+      // ซ่อนบริบทอื่นของหน้าเพื่อ screen reader
+      pageHeader.setAttribute('aria-hidden', 'true');
+      pageMain.setAttribute('aria-hidden', 'true');
+      pageFooter.setAttribute('aria-hidden', 'true');
+      modal.setAttribute('aria-hidden', 'false');
+
+      // Fade / scale-in (ต้องหน่วงเล็กน้อยเพื่อให้เบราว์เซอร์คำนวณ layout ก่อน)
+      setTimeout(() => {
+        modal.classList.remove('opacity-0');
+        modalImg.classList.remove('scale-95');
+        modalImg.classList.add('scale-100');
+      }, 10);
+
+      // โฟกัสปุ่มปิด และเริ่มดักคีย์
+      modalCloseBtn.focus();
+      document.addEventListener('keydown', modalKeyHandler);
+      document.addEventListener('keydown', trapFocus);
+    }
+
+    // ปิดโมดัล: เล่น transition ออก, ซ่อน, ล้าง src, คืน aria และโฟกัส
+    function closeModal() {
+      modal.classList.add('opacity-0');
+      modalImg.classList.remove('scale-100');
+      modalImg.classList.add('scale-95');
+
+      setTimeout(() => {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        modalImg.src = '';
+
+        // คืน aria-hidden ให้ส่วนอื่นของหน้า
+        pageHeader.removeAttribute('aria-hidden');
+        pageMain.removeAttribute('aria-hidden');
+        pageFooter.removeAttribute('aria-hidden');
+        modal.setAttribute('aria-hidden', 'true');
+
+        // คืนโฟกัสไปยังปุ่ม/ลิงก์ที่ผู้ใช้กดมาล่าสุด
+        if (lastFocusedElement) lastFocusedElement.focus();
+
+        // ยกเลิกตัวดักคีย์
+        document.removeEventListener('keydown', modalKeyHandler);
+        document.removeEventListener('keydown', trapFocus);
+      }, 300); // ต้องเท่ากับ duration-300
+    }
+
+    // ปิดด้วยปุ่ม ESC เพื่อความสะดวก/เข้าถึงได้
+    function modalKeyHandler(event) {
+      if (event.key === "Escape") closeModal();
+    }
+
+    // (ทางเลือก) ป้องกัน scroll ของ body ขณะเปิดโมดัล
+    // เพิ่ม document.body.style.overflow = 'hidden' ตอน open และคืน '' ตอน close
+
+    /* ================== Form Validation & Submit ==================
+     * - ปิด submit ปกติ (preventDefault)
+     * - ตรวจความถูกต้องอย่างง่าย (ชื่อ/อีเมล/ข้อความ)
+     * - ป้องกันกดซ้ำด้วย btn.disabled
+     * - แสดงข้อความ resultMsg ชั่วคราว แล้วซ่อนภายหลัง
+     */
+    const form = document.getElementById("contactForm");
+    const resultMsg = document.getElementById("resultMsg"); // กล่องข้อความสำเร็จ
+    const btn = document.getElementById("submitBtn");
+
+    const nameError = document.getElementById("nameError");
+    const emailError = document.getElementById("emailError");
+    const messageError = document.getElementById("messageError");
+
+    // ตรวจรูปแบบอีเมลแบบทั่วไป (ไม่ครอบคลุมทุกกรณีตาม RFC แต่เพียงพอในฟอร์ม)
+    function validateEmail(email) {
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return re.test(String(email).toLowerCase());
+    }
+    function showError(el, msg) {
+      el.textContent = msg;
+      el.classList.remove("hidden");
+    }
+    function hideError(el) {
+      el.classList.add("hidden");
+      el.textContent = "";
+    }
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      // ป้องกันการกดซ้ำขณะกำลังส่ง (เช็คสถานะ disabled)
+      if (btn.disabled) return;
+
+      const nameVal = document.getElementById("name").value.trim();
+      const emailVal = document.getElementById("email").value.trim();
+      const messageVal = document.getElementById("message").value.trim();
+
+      let isValid = true;
+
+      // ตรวจชื่อ: ไม่ว่างและยาว >= 2
+      if (nameVal === "") {
+        showError(nameError, "กรุณากรอกชื่อของคุณ");
+        isValid = false;
+      } else if (nameVal.length < 2) {
+        showError(nameError, "ชื่อสั้นเกินไป (ต้องมากกว่า 2 ตัวอักษร)");
+        isValid = false;
+      } else {
+        hideError(nameError);
+      }
+
+      // ตรวจอีเมล: ไม่ว่าง + รูปแบบถูกต้อง
+      if (emailVal === "") {
+        showError(emailError, "กรุณากรอกอีเมล");
+        isValid = false;
+      } else if (!validateEmail(emailVal)) {
+        showError(emailError, "รูปแบบอีเมลไม่ถูกต้อง (เช่น name@example.com)");
+        isValid = false;
+      } else {
+        hideError(emailError);
+      }
+
+      // ตรวจข้อความ: ไม่ว่าง
+      if (messageVal === "") {
+        showError(messageError, "กรุณากรอกรายละเอียดงาน");
+        isValid = false;
+      } else {
+        hideError(messageError);
+      }
+
+      // ถ้าถูกต้องทั้งหมด -> จำลองการส่ง
+      if (isValid) {
+        const originalText = btn.innerText;
+        btn.innerText = "กำลังส่ง...";
+        btn.classList.add("opacity-75", "cursor-not-allowed");
+        btn.disabled = true; // ปิดการกดซ้ำจริง
+
+        // จำลองดีเลย์เหมือน call API/ส่งอีเมล
+        setTimeout(() => {
+          resultMsg.classList.remove("hidden");
+          resultMsg.classList.add("block", "animate-bounce");
+
+          form.reset(); // ล้างค่าฟอร์มหลังส่ง
+
+          // คืนสถานะปุ่ม
+          btn.innerText = originalText;
+          btn.classList.remove("opacity-75", "cursor-not-allowed");
+          btn.disabled = false;
+
+          // ซ่อนข้อความหลัง 4 วิ
+          setTimeout(() => {
+            resultMsg.classList.add("hidden");
+            resultMsg.classList.remove("block", "animate-bounce");
+          }, 4000);
+
+        }, 1500);
+      }
+    });
+  </script>
 </body>
 </html>
